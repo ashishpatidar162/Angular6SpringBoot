@@ -1,0 +1,58 @@
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class ManagerService {
+  public username: string;
+  public password: String;
+  public firstlast: string;
+  
+  fix='authnticate';
+
+  private baseUrlM = 'http://localhost:8080//api/v1/managers';
+
+  constructor(private http: HttpClient) { }
+
+  createManager(manager: Object): Observable<Object> {
+    return this.http.post(`${this.baseUrlM}`, manager);
+  }
+
+  
+  getManager(id: number): Observable<Object> {
+    return this.http.get(`${this.baseUrlM}/${id}`);
+  }
+
+  getManagerList(): Observable<any> {
+    return this.http.get(`${this.baseUrlM}`);
+  }
+
+  registerSuccessfulLogin(username, firstlast) {
+  
+    sessionStorage.setItem(this.fix, firstlast);
+    console.log('.....');
+    this.username=username;   
+    this.firstlast=firstlast;
+  }
+
+  logout() {
+    sessionStorage.removeItem(this.fix);
+    this.username = null;
+    this.password = null;
+  }
+
+
+  //isUserLoggedIn() {
+  //  let user = sessionStorage.getItem(this.fix);
+  //  if (user === null) return false
+ //   return true
+ // }
+
+  getLoggedInUserName() {console.log('.....');
+    let user = sessionStorage.getItem(this.fix);
+    if (user === null) return ''
+    return user
+  }
+}
